@@ -170,7 +170,7 @@ class Huawei_Sun2000(SmartPlugin):
             await asyncio.wait_for(client.get(rn.MODEL_NAME, self._slave), timeout=4)
         except asyncio.TimeoutError:
             self.logger.error(f"Connect timed out (4s) while trying to get model register")
-            #return None
+            return None
         self._client = client
         self.logger.debug(f"Connected to {self._host}:{self._port}, slave_id {self._slave}")
         return client
