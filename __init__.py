@@ -87,6 +87,7 @@ class Huawei_Sun2000(SmartPlugin):
 
         # global vars
         self._read_item_dictionary = {}
+        self._write_items = []
         self._write_buffer = []
         self._client = None
         self._connecting = False
@@ -182,6 +183,7 @@ class Huawei_Sun2000(SmartPlugin):
             pass
         self.logger.debug(f"Disconnected client {self._created}")
         self._client = None
+        return True
 
     async def inverter_read(self, hold_connection=False):
         for item in self._read_item_dictionary:
@@ -261,6 +263,7 @@ class Huawei_Sun2000(SmartPlugin):
             slave = first[2]
             self._write_buffer.pop(0)
             self.inverter_write(register, value, slave, hold_connection)
+        return True
 
     async def validate_equipment(self):
         if not self._client:
@@ -301,6 +304,7 @@ class Huawei_Sun2000(SmartPlugin):
                 self.alive = False
                 await self.disconnect()
                 return True
+        return False
 
     def string_to_seconds_special(self, input_str):
         input_str = input_str.lower()
@@ -385,6 +389,7 @@ class Huawei_Sun2000(SmartPlugin):
             self.logger.debug(f"Parse sun2000_write item: {item}")
             register = self.get_iattr_value(item.conf, 'sun2000_write')
             if hasattr(rn, register):
+                self._write_items.append(item)
                 return self.update_item
             else:
                 self.logger.warning(f"Invalid key for 'sun2000_write' '{register}' configured")
