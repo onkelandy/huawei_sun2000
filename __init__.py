@@ -31,6 +31,7 @@ from lib.item import Items
 from .webif import WebInterface
 
 import time
+import re
 from huawei_solar import AsyncHuaweiSolar, register_names as rn
 import asyncio
 
@@ -213,9 +214,13 @@ class Huawei_Sun2000(SmartPlugin):
                             self.logger.error(f"inverter_read: Error reading register '{self._read_item_dictionary[item].register}' from {self._host}:{self._port}, slave_id {self._read_item_dictionary[item].slave}: {repr(e)}")
                             # if 'IllegalAddress' occurs the register will be dropped out
                             ex = str(e)
-                            if len(ex) == 101 and ex[86:-1] == 'IllegalAddress':
-                            #if ex[86:-1] == 'IllegalAddress':
-                                self.logger.debug(f"inverter_read: register '{self._read_item_dictionary[item].register}' will not be checked anymore")
+                            pattern_address = r"Exception Response\(\s*\d+\s*,\s*\d+\s*,\s*IllegalValue\s*\)"
+                            pattern_value = r"Exception Response\(\s*\d+\s*,\s*\d+\s*,\s*IllegalValue\s*\)"
+                            if match = re.search(pattern_address, ex):
+                                self.logger.debug(f"inverter_read: register '{self._read_item_dictionary[item].register}' is legal address and will not be checked anymore")
+                                self._read_item_dictionary[item].skip = True
+                            elif match = re.search(pattern_value, ex):
+                                self.logger.debug(f"inverter_read: register '{self._read_item_dictionary[item].register}' gets illegal value and will not be checked anymore")
                                 self._read_item_dictionary[item].skip = True
                     else:
                         self.logger.debug(f"Equipment check skipped item '{item.property.path}'")
