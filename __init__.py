@@ -377,23 +377,25 @@ class Huawei_Sun2000(SmartPlugin):
             if hasattr(rn, register):
                 # check for slave id
                 slave = self._slave
+                log_text = ""
                 if self.has_iattr(item.conf, 'sun2000_slave'):
                     slave = self.string_to_int_special(self.get_iattr_value(item.conf, 'sun2000_slave'), ITEM_SLAVE_DEFAULT, self._slave)
-                    self.logger.debug(f"Item {item.property.path}, slave {slave}")
+                    log_text += f", slave {slave}"
                 # check for sun2000_cycle
                 cycle = self._cycle
                 if self.has_iattr(item.conf, 'sun2000_cycle'):
                     cycle = self.string_to_seconds_special(self.get_iattr_value(item.conf, 'sun2000_cycle'))
-                    self.logger.debug(f"Item {item.property.path}, cycle {cycle}")
+                    log_text += f", cycle {cycle}"
                 # check equipment
                 equipment = None
                 if self.has_iattr(item.conf, 'sun2000_equipment'):
                     equipment_key = self.get_iattr_value(item.conf, 'sun2000_equipment')
                     if equipment_key in EquipmentDictionary:
                         equipment = EquipmentDictionary[equipment_key]
-                        self.logger.debug(f"Item {item.property.path}, equipment {equipment_key}")
+                        log_text += f", equipment {equipment_key}"
                     else:
                         self.logger.warning(f"Invalid key for sun2000_equipment '{equipment_key}' configured")
+                self.logger.debug(f"Item {item.property.path}{logtext}")
                 self._read_item_dictionary.update({item: ReadItem(register, cycle, slave, equipment)})
             else:
                 self.logger.warning(f"Invalid key for 'sun2000_read' '{register}' configured")
