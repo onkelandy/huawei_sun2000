@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # vim: set encoding=utf-8 tabstop=4 softtabstop=4 shiftwidth=4 expandtab
 #########################################################################
-#  Copyright 2023-     <AUTHOR>                                   <EMAIL>
+#  Copyright 2026-     Onkel Andy
 #########################################################################
 #  This file is part of SmartHomeNG.
 #  https://www.smarthomeNG.de
 #  https://knx-user-forum.de/forum/supportforen/smarthome-py
 #
-#  This file implements the web interface for the Sample plugin.
+#  Sample plugin for new plugins to run with SmartHomeNG version 1.5 and
+#  upwards.
 #
 #  SmartHomeNG is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -70,13 +71,14 @@ class WebInterface(SmartPluginWebIf):
 
         :return: contents of the template after beeing rendered
         """
-        pagelength = self.plugin.get_parameter_value('webif_pagelength')
         tmpl = self.tplenv.get_template('index.html')
+        pagelength = self.plugin.get_parameter_value('webif_pagelength')
         # add values to be passed to the Jinja2 template eg: tmpl.render(p=self.plugin, interface=interface, ...)
         return tmpl.render(p=self.plugin,
                            webif_pagelength=pagelength,
                            items=sorted(self.items.return_items(), key=lambda k: str.lower(k['_path'])),
-                           item_count=0)
+                           item_count_read=len(self.plugin._read_item_dictionary.keys()),
+                           item_count_write=len(self.plugin._write_items))
 
 
     @cherrypy.expose
@@ -89,26 +91,11 @@ class WebInterface(SmartPluginWebIf):
         :param dataSet: Dataset for which the data should be returned (standard: None)
         :return: dict with the data needed to update the web page.
         """
-        # if dataSets are used, define them here
-        if dataSet == 'overview':
-            # get the new data from the plugin variable called _webdata
-            data = self.plugin._webdata
-            try:
-                data = json.dumps(data)
-                return data
-            except Exception as e:
-                self.logger.error(f"get_data_html exception: {e}")
         if dataSet is None:
             # get the new data
-            data = {}
-
-            # data['item'] = {}
-            # for i in self.plugin.items:
-            #     data['item'][i]['value'] = self.plugin.getitemvalue(i)
-            #
-            # return it as json the the web page
-            # try:
-            #     return json.dumps(data)
-            # except Exception as e:
-            #     self.logger.error("get_data_html exception: {}".format(e))
+            data = self.plugin._item_values
+            try:
+                return json.dumps(data)
+            except Exception as e:
+                self.logger.error(f"get_data_html exception: {e}")
         return {}

@@ -83,6 +83,7 @@ class Huawei_Sun2000(SmartPlugin):
         self._slave = self.get_parameter_value('slave')
         self._cycle = self.get_parameter_value('cycle')
         self._max_connection_retries = self.get_parameter_value('connection_retries')
+        self._webdata = {'host': self._host, 'port': self._port, 'slave': self._slave, 'cycle': self._cycle, 'retries': self._max_connection_retries}
         self._connection_retries = 0
 
         # global vars
@@ -94,6 +95,7 @@ class Huawei_Sun2000(SmartPlugin):
         self._equipment_validated = False
         self._poll_item = None
         self._created = None
+        self._item_values = {'read': {}, 'write': {}}
 
         # On initialization error use:
         #   self._init_complete = False
@@ -202,6 +204,7 @@ class Huawei_Sun2000(SmartPlugin):
                         try:
                             result = await asyncio.wait_for(self._client.get(getattr(rn, self._read_item_dictionary[item].register), self._read_item_dictionary[item].slave), timeout=4)
                             item(result.value, self.get_shortname())
+                            self._item_values['read'][item.property.path] = {'value': result.value, 'update': item.property.last_update.strftime('%d.%m.%Y %H:%M:%S'), 'change': item.property.last_change.strftime('%d.%m.%Y %H:%M:%S')}
                             self._read_item_dictionary[item].initialized = True
                         except asyncio.TimeoutError:
                             self.logger.warning(f"Time out (4s) while reading register '{self._read_item_dictionary[item].register}' from {self._host}:{self._port}, slave_id {self._read_item_dictionary[item].slave}. Stop reading registers.")
@@ -421,3 +424,5 @@ class Huawei_Sun2000(SmartPlugin):
             self.logger.debug(f"Update_item was called with item {item.property.path} from caller {caller}, source {source} and dest {dest}")
             self._write_buffer.append((register, value, slave))
             self.logger.debug(f"Buffered write {register}={value}")
+            self._item_values['write'][item.property.path] = {'value': value, 'update': item.property.last_update.strftime('%d.%m.%Y %H:%M:%S'), 'change': item.property.last_change.strftime('%d.%m.%Y %H:%M:%S')}
+            self.logger.debug(f"vals {self._item_values}")
