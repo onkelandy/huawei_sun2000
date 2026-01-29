@@ -216,10 +216,10 @@ class Huawei_Sun2000(SmartPlugin):
                             ex = str(e)
                             pattern_address = r"Exception Response\(\s*\d+\s*,\s*\d+\s*,\s*IllegalValue\s*\)"
                             pattern_value = r"Exception Response\(\s*\d+\s*,\s*\d+\s*,\s*IllegalValue\s*\)"
-                            if match = re.search(pattern_address, ex):
+                            if re.search(pattern_address, ex):
                                 self.logger.debug(f"inverter_read: register '{self._read_item_dictionary[item].register}' is legal address and will not be checked anymore")
                                 self._read_item_dictionary[item].skip = True
-                            elif match = re.search(pattern_value, ex):
+                            elif re.search(pattern_value, ex):
                                 self.logger.debug(f"inverter_read: register '{self._read_item_dictionary[item].register}' gets illegal value and will not be checked anymore")
                                 self._read_item_dictionary[item].skip = True
                     else:
