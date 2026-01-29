@@ -5,8 +5,6 @@
 huawei_sun2000
 ==============
 
-Hier sollte eine allgemeine Beschreibung stehen, wozu das Plugin gut ist (was es tut).
-
 .. image:: webif/static/img/plugin_logo.png
    :alt: plugin logo
    :width: 300px
@@ -14,85 +12,82 @@ Hier sollte eine allgemeine Beschreibung stehen, wozu das Plugin gut ist (was es
    :scale: 50 %
    :align: left
 
+Stellt eine Verbindung zu SUN2000 PV-Invertern von Huawei her und
+ermöglicht das Lesen und Schreiben von Registern.
 
 Anforderungen
 =============
 
-Anforderungen des Plugins auflisten. Werden spezielle Soft- oder Hardwarekomponenten benötigt?
-
-
 Notwendige Software
 -------------------
 
-* die
-* benötigte
-* Software
-* auflisten
+* `huawei-solar Pythonmodul <https://pypi.org/project/huawei-solar/>`_
 
-Dies beinhaltet Python- und SmartHomeNG-Module
 
 Unterstützte Geräte
 -------------------
 
-* die
-* unterstütze
-* Hardware
-* auflisten
+Huawei SUN2000 Inverter via
 
-|
+* serielle Schnittstelle
+* Netzwerk
+
+Informationen zur Verbindung mit den Geräten sind hier zu finden:
+`Verbindungsherstellung <https://github.com/wlcrs/huawei_solar/wiki/Connecting-to-the-inverter>`_
+
 
 Konfiguration
 =============
 
 Die Plugin Parameter und die Informationen zur Item-spezifischen Konfiguration des Plugins sind
-unter :doc:`/plugins_doc/config/sample` beschrieben.
+unter :doc:`/plugins_doc/config/huawei_sun2000` beschrieben.
 
-plugin.yaml
------------
+Es empfiehlt sich, die structs aus dem Plugin zu nutzen.
 
-Bitte die Dokumentation lesen, die aus den Metadaten der plugin.yaml erzeugt wurde.
+.. code-block:: yaml
 
+    # items/my.yaml
+    photovoltaik:
+        poll:
+          type: bool
+          sun2000_runpoll: True
+          autotimer: 1 = 0
+        struct:
+          - huawei_sun2000.emma
+          - huawei_sun2000.emma_built_in_energy_sensor
 
-items.yaml
-----------
+Folgende structs werden bereitgestellt:
 
-Bitte die Dokumentation lesen, die aus den Metadaten der plugin.yaml erzeugt wurde.
+* inverter
+* sdongle
+* meter
+* emma_storage
+* emma
+* emma_built_in_energy_sensor
+* emma_external_energy_sensor
+* emma_external_meter
+* storage
+* storage_unit1
+* storage_unit_1_battery_pack_1
+* storage_unit_1_battery_pack_2
+* storage_unit_1_battery_pack_3
+* storage_unit2
+* storage_unit_2_battery_pack_1
+* storage_unit_2_battery_pack_2
+* storage_unit_2_battery_pack_3
 
-
-logic.yaml
-----------
-
-Bitte die Dokumentation lesen, die aus den Metadaten der plugin.yaml erzeugt wurde.
-
-
-Funktionen
-----------
-
-Bitte die Dokumentation lesen, die aus den Metadaten der plugin.yaml erzeugt wurde.
-
-|
-
-Beispiele
-=========
-
-Hier können ausführlichere Beispiele und Anwendungsfälle beschrieben werden. (Sonst ist der Abschnitt zu löschen)
-
-|
 
 Web Interface
 =============
 
-Die Datei ``dev/sample_plugin/webif/templates/index.html`` sollte als Grundlage für Webinterfaces genutzt werden. Um Tabelleninhalte nach Spalten filtern und sortieren zu können, muss der entsprechende Code Block mit Referenz auf die relevante Table ID eingefügt werden (siehe Doku).
+Das Plugin Webinterface kann aus dem Admin Interface aufgerufen werden. Dazu auf der Seite Plugins in der entsprechenden
+Zeile das Icon in der Spalte **Web Interface** anklicken.
 
-SmartHomeNG liefert eine Reihe Komponenten von Drittherstellern mit, die für die Gestaltung des Webinterfaces genutzt werden können. Erweiterungen dieser Komponenten usw. finden sich im Ordner ``/modules/http/webif/gstatic``.
+Darunter gibt es einen Tab für zu lesende und beschreibbare Items mit den entsprechend relevanten Informationen.
 
-Wenn das Plugin darüber hinaus noch Komponenten benötigt, werden diese im Ordner ``webif/static`` des Plugins abgelegt.
-
-|
-
-Version History
-===============
-
-In diesem Abschnitt kann die Versionshistorie dokumentiert werden, falls der Plugin Autor dieses möchte. Diese Abschnitt
-ist optional.
-
+.. image:: assets/webif-huawei.png
+   :class: screenshot
+   :width: 2994px
+   :height: 1480px
+   :scale: 30 %
+   :align: center
