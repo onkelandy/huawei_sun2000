@@ -45,6 +45,11 @@ class EquipmentCheck:
 
 
 EquipmentDictionary = {
+    "INVERTER": EquipmentCheck(rn.MODEL_NAME, '', '!='),
+    "METER": EquipmentCheck(rn.METER_TYPE_CHECK, 0, '=='),
+    "EMMA_STORAGE": EquipmentCheck(rn.STATE_OF_CAPACITY, 0, '>'),
+    "EMMA_EXTERNAL_METER": EquipmentCheck(rn.EMMA_EXTERNAL_METER_RUNNING_STATUS, 1, '=='),
+    "EMMA": EquipmentCheck(rn.EMMA_MODEL, '', '!='),
     "STORAGE": EquipmentCheck(rn.STORAGE_RATED_CAPACITY, 0, '>'),
     "STORAGE_UNIT_1": EquipmentCheck(rn.STORAGE_UNIT_1_NO, 0, '>'),
     "STORAGE_UNIT_1_BATTERY_PACK_1": EquipmentCheck(rn.STORAGE_UNIT_1_PACK_1_NO, 0, '>'),
@@ -217,15 +222,13 @@ class Huawei_Sun2000(SmartPlugin):
                             pattern_address = r"Exception Response\(\s*\d+\s*,\s*\d+\s*,\s*IllegalValue\s*\)"
                             pattern_value = r"Exception Response\(\s*\d+\s*,\s*\d+\s*,\s*IllegalValue\s*\)"
                             if re.search(pattern_address, ex):
-                                self.logger.debug(f"inverter_read: register '{self._read_item_dictionary[item].register}' is legal address and will not be checked anymore")
+                                self.logger.debug(f"inverter_read: register '{self._read_item_dictionary[item].register}' is illegal address and will not be checked anymore")
                                 self._read_item_dictionary[item].skip = True
                             elif re.search(pattern_value, ex):
                                 self.logger.debug(f"inverter_read: register '{self._read_item_dictionary[item].register}' gets illegal value and will not be checked anymore")
                                 self._read_item_dictionary[item].skip = True
                     else:
                         self.logger.debug(f"Equipment check skipped item '{item.property.path}'")
-            else:
-                self.logger.debug(f"Illegal address! Item '{item.property.path}' skipped")
         if not hold_connection:
             await self.disconnect()
 
@@ -235,7 +238,7 @@ class Huawei_Sun2000(SmartPlugin):
         if not self._client:
             self.logger.debug("Poll skipped: no connection")
             return
-        if not self._equipment_validated:
+        if self._equipment_validated is False:
             try:
                 ok = await self.validate_equipment()
                 self._equipment_validated = ok
@@ -290,6 +293,8 @@ class Huawei_Sun2000(SmartPlugin):
                         eq.status = result.value > eq.true_value
                     case "<":
                         eq.status = result.value < eq.true_value
+                    case "!=":
+                        eq.status = result.value != eq.true_value
                     case _:
                         eq.status = result.value == eq.true_value
 
