@@ -103,7 +103,6 @@ item_structs:
     inverter:
         sun2000_equipment@instance: INVERTER
         sun2000_slave@instance: default
-        sun2000_equipment@instance: ..:.
 
         model_name:
             type: str
@@ -1191,7 +1190,6 @@ item_structs:
 
     sdongle:
         sun2000_slave@instance: default
-        sun2000_equipment@instance: ..:.
 
         total_input_power:
             type: num
@@ -1226,7 +1224,6 @@ item_structs:
     meter:
         sun2000_equipment@instance: METER
         sun2000_slave@instance: default
-        sun2000_equipment@instance: ..:.
 
         meter_status:
             type: num
@@ -1385,7 +1382,6 @@ item_structs:
     emma_storage:
         sun2000_equipment@instance: EMMA_STORAGE
         sun2000_slave@instance: default
-        sun2000_equipment@instance: ..:.
 
         energy_charged_today:
             type: num
@@ -1496,7 +1492,6 @@ item_structs:
     emma:
         sun2000_equipment@instance: EMMA
         sun2000_slave@instance: default
-        sun2000_equipment@instance: ..:.
 
         emma_software_version:
             type: str
@@ -1711,8 +1706,8 @@ item_structs:
 
         emma_tou_maximunm_power_for_charging_batteries_from_grid:
             type: num
-            sun2000_read@instance: EMMA_TOU_MAXIMUNM_POWER_FOR_CHARGING_BATTERIES_FROM_GRID
-            sun2000_write@instance: EMMA_TOU_MAXIMUNM_POWER_FOR_CHARGING_BATTERIES_FROM_GRID
+            sun2000_read@instance: EMMA_TOU_MAXIMUM_POWER_FOR_CHARGING_BATTERIES_FROM_GRID
+            sun2000_write@instance: EMMA_TOU_MAXIMUM_POWER_FOR_CHARGING_BATTERIES_FROM_GRID
             sun2000_slave@instance: ..:.
             sun2000_equipment@instance: ..:.
             database@instance: init
@@ -1783,7 +1778,6 @@ item_structs:
 
     emma_built_in_energy_sensor:
         sun2000_slave@instance: default
-        sun2000_equipment@instance: ..:.
 
         phase_a_voltage:
             type: num
@@ -1895,7 +1889,6 @@ item_structs:
 
     emma_external_energy_sensor:
         sun2000_slave@instance: default
-        sun2000_equipment@instance: ..:.
 
         phase_a_voltage:
             type: num
@@ -2008,7 +2001,6 @@ item_structs:
     emma_external_meter:
         sun2000_equipment@instance: EMMA_EXTERNAL_METER
         sun2000_slave@instance: default
-        sun2000_equipment@instance: ..:.
 
         external_meter_running_status:
             type: num
@@ -2146,7 +2138,6 @@ item_structs:
     storage:
         sun2000_equipment@instance: STORAGE
         sun2000_slave@instance: default
-        sun2000_equipment@instance: ..:.
 
         maximum_charge_power:
             type: num
@@ -2519,7 +2510,6 @@ item_structs:
     storage_unit_1:
         sun2000_equipment@instance: STORAGE_UNIT_1
         sun2000_slave@instance: default
-        sun2000_equipment@instance: ..:.
 
         running_status:
             type: num
@@ -2676,7 +2666,6 @@ item_structs:
     storage_unit_1_battery_pack_1:
         sun2000_equipment@instance: STORAGE_UNIT_1_BATTERY_PACK_1
         sun2000_slave@instance: default
-        sun2000_equipment@instance: ..:.
 
         serial_number:
             type: str
@@ -2766,7 +2755,6 @@ item_structs:
     storage_unit_1_battery_pack_2:
         sun2000_equipment@instance: STORAGE_UNIT_1_BATTERY_PACK_2
         sun2000_slave@instance: default
-        sun2000_equipment@instance: ..:.
 
         serial_number:
             type: str
@@ -2856,7 +2844,6 @@ item_structs:
     storage_unit_1_battery_pack_3:
         sun2000_equipment@instance: STORAGE_UNIT_1_BATTERY_PACK_3
         sun2000_slave@instance: default
-        sun2000_equipment@instance: ..:.
 
         serial_number:
             type: str
@@ -2946,7 +2933,6 @@ item_structs:
     storage_unit_2:
         sun2000_equipment@instance: STORAGE_UNIT_2
         sun2000_slave@instance: default
-        sun2000_equipment@instance: ..:.
 
         running_status:
             type: num
@@ -3095,7 +3081,6 @@ item_structs:
     storage_unit_2_battery_pack_1:
         sun2000_equipment@instance: STORAGE_UNIT_2_BATTERY_PACK_1
         sun2000_slave@instance: default
-        sun2000_equipment@instance: ..:.
 
         serial_number:
             type: str
@@ -3185,7 +3170,6 @@ item_structs:
     storage_unit_2_battery_pack_2:
         sun2000_equipment@instance: STORAGE_UNIT_2_BATTERY_PACK_2
         sun2000_slave@instance: default
-        sun2000_equipment@instance: ..:.
 
         serial_number:
             type: str
@@ -3275,7 +3259,6 @@ item_structs:
     storage_unit_2_battery_pack_3:
         sun2000_equipment@instance: STORAGE_UNIT_2_BATTERY_PACK_3
         sun2000_slave@instance: default
-        sun2000_equipment@instance: ..:.
 
         serial_number:
             type: str

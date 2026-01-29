@@ -45,21 +45,23 @@ class EquipmentCheck:
 
 
 EquipmentDictionary = {
-    "INVERTER": EquipmentCheck(rn.MODEL_NAME, '', '!='),
-    "METER": EquipmentCheck(rn.METER_TYPE_CHECK, 0, '=='),
-    "EMMA_STORAGE": EquipmentCheck(rn.STATE_OF_CAPACITY, 0, '>'),
-    "EMMA_EXTERNAL_METER": EquipmentCheck(rn.EMMA_EXTERNAL_METER_RUNNING_STATUS, 1, '=='),
-    "EMMA": EquipmentCheck(rn.EMMA_MODEL, '', '!='),
-    "STORAGE": EquipmentCheck(rn.STORAGE_RATED_CAPACITY, 0, '>'),
-    "STORAGE_UNIT_1": EquipmentCheck(rn.STORAGE_UNIT_1_NO, 0, '>'),
-    "STORAGE_UNIT_1_BATTERY_PACK_1": EquipmentCheck(rn.STORAGE_UNIT_1_PACK_1_NO, 0, '>'),
-    "STORAGE_UNIT_1_BATTERY_PACK_2": EquipmentCheck(rn.STORAGE_UNIT_1_PACK_2_NO, 0, '>'),
-    "STORAGE_UNIT_1_BATTERY_PACK_3": EquipmentCheck(rn.STORAGE_UNIT_1_PACK_3_NO, 0, '>'),
-    "STORAGE_UNIT_2": EquipmentCheck(rn.STORAGE_UNIT_2_NO, 0, '>'),
-    "STORAGE_UNIT_2_BATTERY_PACK_1": EquipmentCheck(rn.STORAGE_UNIT_2_PACK_1_NO, 0, '>'),
-    "STORAGE_UNIT_2_BATTERY_PACK_2": EquipmentCheck(rn.STORAGE_UNIT_2_PACK_2_NO, 0, '>'),
-    "STORAGE_UNIT_2_BATTERY_PACK_3": EquipmentCheck(rn.STORAGE_UNIT_2_PACK_3_NO, 0, '>')
+    "INVERTER": EquipmentCheck(getattr(rn, "MODEL_NAME", None), '', '!='),
+    "METER": EquipmentCheck(getattr(rn, "METER_TYPE_CHECK", None), 0, '=='),
+    "EMMA_EXTERNAL_METER": EquipmentCheck(getattr(rn, "EMMA_EXTERNAL_METER_RUNNING_STATUS", None), 1, '=='),
+    "EMMA_STORAGE": EquipmentCheck(getattr(rn, "STATE_OF_CAPACITY", None), 0, '>'),
+    "EMMA": EquipmentCheck(getattr(rn, "EMMA_MODEL", None), '', '!='),
+    "STORAGE": EquipmentCheck(getattr(rn, "STORAGE_RATED_CAPACITY", None), 0, '>'),
+    "STORAGE_UNIT_1": EquipmentCheck(getattr(rn, "STORAGE_UNIT_1_NO", None), 0, '>'),
+    "STORAGE_UNIT_1_BATTERY_PACK_1": EquipmentCheck(getattr(rn, "STORAGE_UNIT_1_PACK_1_NO", None), 0, '>'),
+    "STORAGE_UNIT_1_BATTERY_PACK_2": EquipmentCheck(getattr(rn, "STORAGE_UNIT_1_PACK_2_NO", None), 0, '>'),
+    "STORAGE_UNIT_1_BATTERY_PACK_3": EquipmentCheck(getattr(rn, "STORAGE_UNIT_1_PACK_3_NO", None), 0, '>'),
+    "STORAGE_UNIT_2": EquipmentCheck(getattr(rn, "STORAGE_UNIT_2_NO", None), 0, '>'),
+    "STORAGE_UNIT_2_BATTERY_PACK_1": EquipmentCheck(getattr(rn, "STORAGE_UNIT_2_PACK_1_NO", None), 0, '>'),
+    "STORAGE_UNIT_2_BATTERY_PACK_2": EquipmentCheck(getattr(rn, "STORAGE_UNIT_2_PACK_2_NO", None), 0, '>'),
+    "STORAGE_UNIT_2_BATTERY_PACK_3": EquipmentCheck(getattr(rn, "STORAGE_UNIT_2_PACK_3_NO", None), 0, '>')
 }
+
+EquipmentDictionary = {k: v for k, v in EquipmentDictionary.items() if v.register is not None}
 
 
 ITEM_CYCLE_DEFAULT = "default"
@@ -299,7 +301,8 @@ class Huawei_Sun2000(SmartPlugin):
                         eq.status = result.value == eq.true_value
 
                 self.logger.debug(
-                    f"Equipment {eq.register}: status={eq.status}"
+                    f"Equipment check for item {item.property.path}: "
+                    f"{eq.register} results in value {result.value}. Status={eq.status}"
                 )
             except asyncio.TimeoutError:
                 self.logger.error(f"Time out (4s) while checking equipment.")
