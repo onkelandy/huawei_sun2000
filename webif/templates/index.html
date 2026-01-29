@@ -24,6 +24,7 @@
         shngInsertText (item+'_value', objResponse['read'][item]['value'], 'read', 2);
         shngInsertText (item+'_lastupdate', objResponse['read'][item]['update'], 'read', 2);
         shngInsertText (item+'_lastchange', objResponse['read'][item]['change'], 'read', 2);
+        shngInsertText (item+'_initialized', objResponse['read'][item]['init'], 'read', 2);
 			}
       for (var item in objResponse['write']) {
         shngInsertText (item+'_value', objResponse['write'][item]['value'], 'write', 2);
@@ -101,7 +102,7 @@
             {{ item.property.last_change.strftime('%d.%m.%Y %H:%M:%S') }}
           </td>
           <td class="py-1" id="{{ item }}_slave">{{ p._read_item_dictionary[item].slave }}</td>
-          <td class="py-1" id="{{ item }}_equipment">{{ p._read_item_dictionary[item].equipment }}</td>
+          <td class="py-1" id="{{ item }}_equipment">{{ p._read_item_dictionary[item].equipment_key }}</td>
           <td class="py-1" id="{{ item }}_initialized">{{ p._read_item_dictionary[item].initialized }}</td>
           <td class="py-1" id="{{ item }}_skip">{{ p._read_item_dictionary[item].skip }}</td>
           <td class="py-1" id="{{ item }}_cycle">{{ p._read_item_dictionary[item].cycle }}</td>

@@ -69,11 +69,12 @@ ITEM_CYCLE_STARTUP = "startup"
 ITEM_SLAVE_DEFAULT = "default"
 
 class ReadItem:
-    def __init__(self, register, cycle=ITEM_CYCLE_DEFAULT, slave=ITEM_SLAVE_DEFAULT, equipment=None, initialized=False, skip=False):
+    def __init__(self, register, cycle=ITEM_CYCLE_DEFAULT, slave=ITEM_SLAVE_DEFAULT, equipment=None, equipment_key="", initialized=False, skip=False):
         self.register = register
         self.cycle = cycle
         self.slave = slave
         self.equipment = equipment
+        self.equipment_key = equipment_key
         self.initialized = initialized
         self.skip = skip
 
@@ -212,8 +213,8 @@ class Huawei_Sun2000(SmartPlugin):
                         try:
                             result = await asyncio.wait_for(self._client.get(getattr(rn, self._read_item_dictionary[item].register), self._read_item_dictionary[item].slave), timeout=4)
                             item(result.value, self.get_shortname())
-                            self._item_values['read'][item.property.path] = {'value': result.value, 'update': item.property.last_update.strftime('%d.%m.%Y %H:%M:%S'), 'change': item.property.last_change.strftime('%d.%m.%Y %H:%M:%S')}
                             self._read_item_dictionary[item].initialized = True
+                            self._item_values['read'][item.property.path] = {'value': result.value, 'init': 'True', 'update': item.property.last_update.strftime('%d.%m.%Y %H:%M:%S'), 'change': item.property.last_change.strftime('%d.%m.%Y %H:%M:%S')}
                         except asyncio.TimeoutError:
                             self.logger.warning(f"Time out (4s) while reading register '{self._read_item_dictionary[item].register}' from {self._host}:{self._port}, slave_id {self._read_item_dictionary[item].slave}. Stop reading registers.")
                             break
@@ -230,7 +231,7 @@ class Huawei_Sun2000(SmartPlugin):
                                 self.logger.debug(f"inverter_read: register '{self._read_item_dictionary[item].register}' gets illegal value and will not be checked anymore")
                                 self._read_item_dictionary[item].skip = True
                     else:
-                        self.logger.debug(f"Equipment check skipped item '{item.property.path}'")
+                        self.logger.debug(f"Equipment check failed, skipped item '{item.property.path}'")
         if not hold_connection:
             await self.disconnect()
 
@@ -398,8 +399,8 @@ class Huawei_Sun2000(SmartPlugin):
                         log_text += f", equipment {equipment_key}"
                     else:
                         self.logger.warning(f"Invalid key for sun2000_equipment '{equipment_key}' configured")
-                self.logger.debug(f"Item {item.property.path}{logtext}")
-                self._read_item_dictionary.update({item: ReadItem(register, cycle, slave, equipment)})
+                self.logger.debug(f"Item {item.property.path}{log_text}")
+                self._read_item_dictionary.update({item: ReadItem(register, cycle, slave, equipment, equipment_key)})
             else:
                 self.logger.warning(f"Invalid key for 'sun2000_read' '{register}' configured")
         # check for attribute 'sun2000_write'
