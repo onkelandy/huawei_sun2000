@@ -399,6 +399,8 @@ class Huawei_Sun2000(SmartPlugin):
                         log_text += f", equipment {equipment_key}"
                     else:
                         self.logger.warning(f"Invalid key for sun2000_equipment '{equipment_key}' configured")
+                else:
+                    equipment_key = 'None'
                 self.logger.debug(f"Item {item.property.path}{log_text}")
                 self._read_item_dictionary.update({item: ReadItem(register, cycle, slave, equipment, equipment_key)})
             else:
