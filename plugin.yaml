@@ -1704,7 +1704,7 @@ item_structs:
             sun2000_equipment@instance: ..:.
             database@instance: init
 
-        emma_tou_maximunm_power_for_charging_batteries_from_grid:
+        emma_tou_maximum_power_for_charging_batteries_from_grid:
             type: num
             sun2000_read@instance: EMMA_TOU_MAXIMUM_POWER_FOR_CHARGING_BATTERIES_FROM_GRID
             sun2000_write@instance: EMMA_TOU_MAXIMUM_POWER_FOR_CHARGING_BATTERIES_FROM_GRID
